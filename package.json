@@ -1,0 +1,19 @@
+{
+  "name": "sqlite-test-frontend",
+  "version": "1.0.0",
+  "description": "The frontend of an app to test the sqlite module built in to nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KSmith8888/sqlite-test-frontend.git"
+  },
+  "author": "Kevyn Smith",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KSmith8888/sqlite-test-frontend/issues"
+  },
+  "homepage": "https://github.com/KSmith8888/sqlite-test-frontend#readme"
+}
