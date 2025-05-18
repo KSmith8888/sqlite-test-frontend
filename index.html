@@ -7,8 +7,21 @@
     </head>
     <body>
         <h1>An app to test the new sqlite module in NodeJS</h1>
+        <form id="get-notes-form">
+            <h2>Get all notes</h2>
+            <button type="submit">Submit</button>
+        </form>
+        <form id="note-by-id-form">
+            <h2>Get note by ID</h2>
+            <input name="noteId" type="number" min="1" max="99" />
+            <button type="submit">Submit</button>
+        </form>
         <form id="create-note-form">
-            <h2>Create New Note</h2>
+            <h2>Create new note</h2>
+            <label for="new-note-title">Title:</label>
+            <input id="new-note-title" name="title" type="text" />
+            <label for="new-note-content">Content:</label>
+            <input id="new-note-content" name="content" type="text" />
             <button type="submit">Submit</button>
         </form>
         <script type="module" src="/src/notes.ts"></script>
