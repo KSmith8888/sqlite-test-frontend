@@ -24,6 +24,15 @@
             <input id="new-note-content" name="content" type="text" />
             <button type="submit">Submit</button>
         </form>
+        <form id="delete-by-id-form">
+            <h2>Delete by id</h2>
+            <input name="deleteId" type="number" min="1" max="99" />
+            <button type="submit">Submit</button>
+        </form>
+        <form id="delete-notes-form">
+            <h2>Delete all notes</h2>
+            <button type="submit">Submit</button>
+        </form>
         <script type="module" src="/src/notes.ts"></script>
     </body>
 </html>
