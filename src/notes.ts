@@ -18,6 +18,13 @@ const messageText = <HTMLParagraphElement>(
     document.getElementById("message-text")
 );
 const notesArea = <HTMLElement>document.getElementById("notes-area");
+const getUsersForm = <HTMLFormElement>document.getElementById("get-users-form");
+const userByIdForm = <HTMLFormElement>(
+    document.getElementById("user-by-id-form")
+);
+const createUserForm = <HTMLFormElement>(
+    document.getElementById("create-user-form")
+);
 
 function createNotes(notesArray: []) {
     notesArray.forEach((note: unknown) => {
@@ -226,6 +233,87 @@ deleteNotesForm.addEventListener("submit", async (e) => {
         if (data.notes && Array.isArray(data.notes) && data.notes.length > 0) {
             createNotes(data.notes);
         }
+    } catch (error) {
+        if (error instanceof Error) {
+            messageText.textContent = error.message;
+        }
+    }
+});
+
+getUsersForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+        const response = await fetch("http://127.0.0.1:3000/api/v1/users");
+        const data = await response.json();
+        if (!data) throw new Error("No data received");
+        if (data.message && typeof data.message === "string") {
+            messageText.textContent = data.message;
+        }
+        console.log(data);
+    } catch (error) {
+        if (error instanceof Error) {
+            messageText.textContent = error.message;
+        }
+    }
+});
+
+userByIdForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+        const formInfo = new FormData(userByIdForm);
+        const userId = formInfo.get("userId");
+        if (
+            !userId ||
+            typeof userId !== "string" ||
+            typeof parseInt(userId) !== "number"
+        ) {
+            throw new Error("No valid note id provided");
+        }
+        const response = await fetch(
+            `http://127.0.0.1:3000/api/v1/users/${userId}`
+        );
+        const data = await response.json();
+        if (!data) throw new Error("No data received");
+        if (data.message && typeof data.message === "string") {
+            messageText.textContent = data.message;
+        }
+        console.log(data);
+        userByIdForm.reset();
+    } catch (error) {
+        if (error instanceof Error) {
+            messageText.textContent = error.message;
+        }
+    }
+});
+
+createUserForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+        const formData = new FormData(createUserForm);
+        const name = formData.get("name");
+        const email = formData.get("email");
+        const age = formData.get("age");
+        const response = await fetch(
+            "http://127.0.0.1:3000/api/v1/users/create",
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    name,
+                    email,
+                    age,
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        const data = await response.json();
+        if (!data) throw new Error("No data received");
+        if (data.message && typeof data.message === "string") {
+            messageText.textContent = data.message;
+        }
+        console.log(data);
+        createNoteForm.reset();
     } catch (error) {
         if (error instanceof Error) {
             messageText.textContent = error.message;

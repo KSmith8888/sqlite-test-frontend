@@ -68,6 +68,32 @@
                     <h3 class="form-heading">Delete all notes</h3>
                     <button type="submit">Submit</button>
                 </form>
+                <form id="get-users-form" class="note-form">
+                    <h3 class="form-heading">Get all users</h3>
+                    <button type="submit">Submit</button>
+                </form>
+                <form id="user-by-id-form" class="note-form">
+                    <h3 class="form-heading">Get user by ID</h3>
+                    <label for="get-note-id">User Id:</label>
+                    <input
+                        name="userId"
+                        id="get-user-id"
+                        type="number"
+                        min="1"
+                        max="99"
+                    />
+                    <button type="submit">Submit</button>
+                </form>
+                <form id="create-user-form" class="note-form">
+                    <h3 class="form-heading">Create new user</h3>
+                    <label for="new-user-name">Name:</label>
+                    <input id="new-user-name" name="name" type="text" />
+                    <label for="new-user-email">Email:</label>
+                    <input id="new-user-email" name="email" type="email" />
+                    <label for="new-user-age">Age:</label>
+                    <input id="new-user-age" name="age" type="number" />
+                    <button type="submit">Submit</button>
+                </form>
             </section>
             <section id="notes-section">
                 <h2 id="notes-section-heading">Notes</h2>
