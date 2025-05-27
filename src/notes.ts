@@ -18,12 +18,19 @@ const messageText = <HTMLParagraphElement>(
     document.getElementById("message-text")
 );
 const notesArea = <HTMLElement>document.getElementById("notes-area");
+const usersArea = <HTMLElement>document.getElementById("users-area");
 const getUsersForm = <HTMLFormElement>document.getElementById("get-users-form");
 const userByIdForm = <HTMLFormElement>(
     document.getElementById("user-by-id-form")
 );
 const createUserForm = <HTMLFormElement>(
     document.getElementById("create-user-form")
+);
+const deleteUserForm = <HTMLFormElement>(
+    document.getElementById("delete-user-form")
+);
+const deleteAllUsersForm = <HTMLFormElement>(
+    document.getElementById("delete-all-users-form")
 );
 
 function createNotes(notesArray: []) {
@@ -53,6 +60,43 @@ function createNotes(notesArray: []) {
             content.classList.add("note-content");
             content.textContent = `Content: ${note.content}`;
             container.append(content);
+        }
+    });
+}
+
+function createUsers(usersArray: []) {
+    usersArray.forEach((user: unknown) => {
+        if (
+            user &&
+            typeof user === "object" &&
+            "id" in user &&
+            typeof user.id === "number" &&
+            "name" in user &&
+            typeof user.name === "string" &&
+            "email" in user &&
+            typeof user.email === "string" &&
+            "age" in user &&
+            typeof user.age === "number"
+        ) {
+            const container = document.createElement("div");
+            container.classList.add("user-container");
+            usersArea.append(container);
+            const userId = document.createElement("p");
+            userId.classList.add("user-id");
+            userId.textContent = `Id: ${user.id.toString(10)}`;
+            container.append(userId);
+            const name = document.createElement("p");
+            name.classList.add("user-name");
+            name.textContent = `Name: ${user.name}`;
+            container.append(name);
+            const email = document.createElement("p");
+            email.classList.add("user-email");
+            email.textContent = `Email: ${user.email}`;
+            container.append(email);
+            const age = document.createElement("p");
+            age.classList.add("user-age");
+            age.textContent = `Age: ${user.age}`;
+            container.append(age);
         }
     });
 }
@@ -249,7 +293,11 @@ getUsersForm.addEventListener("submit", async (e) => {
         if (data.message && typeof data.message === "string") {
             messageText.textContent = data.message;
         }
-        console.log(data);
+        usersArea.replaceChildren();
+        if (data.users && Array.isArray(data.users)) {
+            if (data.users.length > 0) createUsers(data.users);
+            else messageText.textContent = "Message: No users were returned";
+        }
     } catch (error) {
         if (error instanceof Error) {
             messageText.textContent = error.message;
@@ -277,7 +325,11 @@ userByIdForm.addEventListener("submit", async (e) => {
         if (data.message && typeof data.message === "string") {
             messageText.textContent = data.message;
         }
-        console.log(data);
+        usersArea.replaceChildren();
+        if (data.users && Array.isArray(data.users)) {
+            if (data.users.length > 0) createUsers(data.users);
+            else messageText.textContent = "Message: No users were returned";
+        }
         userByIdForm.reset();
     } catch (error) {
         if (error instanceof Error) {
@@ -312,8 +364,71 @@ createUserForm.addEventListener("submit", async (e) => {
         if (data.message && typeof data.message === "string") {
             messageText.textContent = data.message;
         }
-        console.log(data);
-        createNoteForm.reset();
+        usersArea.replaceChildren();
+        if (data.users && Array.isArray(data.users)) {
+            if (data.users.length > 0) createUsers(data.users);
+            else messageText.textContent = "Message: No users were returned";
+        }
+        createUserForm.reset();
+    } catch (error) {
+        if (error instanceof Error) {
+            messageText.textContent = error.message;
+        }
+    }
+});
+
+deleteUserForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+        const formInfo = new FormData(deleteUserForm);
+        const deleteId = formInfo.get("deleteId");
+        if (
+            !deleteId ||
+            typeof deleteId !== "string" ||
+            typeof parseInt(deleteId, 10) !== "number"
+        ) {
+            throw new Error("Valid user id not provided");
+        }
+        const response = await fetch(
+            `http://127.0.0.1:3000/api/v1/users/${deleteId}`,
+            {
+                method: "DELETE",
+            }
+        );
+        const data = await response.json();
+        if (!data) throw new Error("No data received");
+        if (data.message && typeof data.message === "string") {
+            messageText.textContent = data.message;
+        }
+        usersArea.replaceChildren();
+        if (data.users && Array.isArray(data.users)) {
+            if (data.users.length > 0) createUsers(data.users);
+            else messageText.textContent = "Message: No users were returned";
+        }
+        deleteUserForm.reset();
+    } catch (error) {
+        if (error instanceof Error) {
+            messageText.textContent = error.message;
+        }
+    }
+});
+
+deleteAllUsersForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+        const response = await fetch("http://127.0.0.1:3000/api/v1/users/", {
+            method: "DELETE",
+        });
+        const data = await response.json();
+        if (!data) throw new Error("No data received");
+        if (data.message && typeof data.message === "string") {
+            messageText.textContent = data.message;
+        }
+        usersArea.replaceChildren();
+        if (data.users && Array.isArray(data.users)) {
+            if (data.users.length > 0) createUsers(data.users);
+            else messageText.textContent = "Message: No users were returned";
+        }
     } catch (error) {
         if (error instanceof Error) {
             messageText.textContent = error.message;

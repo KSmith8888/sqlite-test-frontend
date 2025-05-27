@@ -94,11 +94,28 @@
                     <input id="new-user-age" name="age" type="number" />
                     <button type="submit">Submit</button>
                 </form>
+                <form id="delete-user-form" class="note-form">
+                    <h3 class="form-heading">Delete by id</h3>
+                    <label for="delete-user-id">User Id:</label>
+                    <input
+                        name="deleteId"
+                        id="delete-user-id"
+                        type="number"
+                        min="1"
+                        max="99"
+                    />
+                    <button type="submit">Submit</button>
+                </form>
+                <form id="delete-all-users-form" class="note-form">
+                    <h3 class="form-heading">Delete all users</h3>
+                    <button type="submit">Submit</button>
+                </form>
             </section>
             <section id="notes-section">
-                <h2 id="notes-section-heading">Notes</h2>
+                <h2 id="notes-section-heading">Notes and users</h2>
                 <p id="message-text"></p>
                 <div id="notes-area"></div>
+                <div id="users-area"></div>
             </section>
         </div>
         <script type="module" src="/src/notes.ts"></script>

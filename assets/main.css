@@ -47,7 +47,8 @@ body {
     margin-bottom: 0.5em;
 }
 
-.note-container {
+.note-container,
+.user-container {
     border-radius: 5px;
     border: 1px solid black;
     padding: 1em;
@@ -59,11 +60,15 @@ body {
 }
 
 .note-title,
-.note-content {
+.note-content,
+.user-name,
+.user-email,
+.user-age {
     margin: 0.5em;
     align-self: center;
 }
 
-.note-id {
+.note-id,
+.user-id {
     margin: 0.5em;
 }
