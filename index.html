@@ -74,7 +74,7 @@
                 </form>
                 <form id="user-by-id-form" class="note-form">
                     <h3 class="form-heading">Get user by ID</h3>
-                    <label for="get-note-id">User Id:</label>
+                    <label for="get-user-id">User Id:</label>
                     <input
                         name="userId"
                         id="get-user-id"
@@ -92,6 +92,20 @@
                     <input id="new-user-email" name="email" type="email" />
                     <label for="new-user-age">Age:</label>
                     <input id="new-user-age" name="age" type="number" />
+                    <button type="submit">Submit</button>
+                </form>
+                <form id="update-email-form" class="note-form">
+                    <h3 class="form-heading">Update email</h3>
+                    <label for="email-id">User Id:</label>
+                    <input
+                        name="userId"
+                        id="email-id"
+                        type="number"
+                        min="1"
+                        max="99"
+                    />
+                    <label for="update-email">New Email:</label>
+                    <input id="update-email" name="email" type="email" />
                     <button type="submit">Submit</button>
                 </form>
                 <form id="delete-user-form" class="note-form">

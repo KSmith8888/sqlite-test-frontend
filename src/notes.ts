@@ -26,6 +26,9 @@ const userByIdForm = <HTMLFormElement>(
 const createUserForm = <HTMLFormElement>(
     document.getElementById("create-user-form")
 );
+const updateEmailForm = <HTMLFormElement>(
+    document.getElementById("update-email-form")
+);
 const deleteUserForm = <HTMLFormElement>(
     document.getElementById("delete-user-form")
 );
@@ -370,6 +373,49 @@ createUserForm.addEventListener("submit", async (e) => {
             else messageText.textContent = "Message: No users were returned";
         }
         createUserForm.reset();
+    } catch (error) {
+        if (error instanceof Error) {
+            messageText.textContent = error.message;
+        }
+    }
+});
+
+updateEmailForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+        const formInfo = new FormData(updateEmailForm);
+        const newEmail = formInfo.get("email");
+        const userId = formInfo.get("userId");
+        if (
+            !userId ||
+            typeof userId !== "string" ||
+            typeof parseInt(userId) !== "number"
+        ) {
+            throw new Error("No valid note id provided");
+        }
+        const response = await fetch(
+            `http://127.0.0.1:3000/api/v1/users/${userId}`,
+            {
+                method: "PATCH",
+                body: JSON.stringify({
+                    email: newEmail,
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        const data = await response.json();
+        if (!data) throw new Error("No data received");
+        if (data.message && typeof data.message === "string") {
+            messageText.textContent = data.message;
+        }
+        usersArea.replaceChildren();
+        if (data.users && Array.isArray(data.users)) {
+            if (data.users.length > 0) createUsers(data.users);
+            else messageText.textContent = "Message: No users were returned";
+        }
+        updateEmailForm.reset();
     } catch (error) {
         if (error instanceof Error) {
             messageText.textContent = error.message;
