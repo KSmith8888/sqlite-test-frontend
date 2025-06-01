@@ -49,26 +49,21 @@ body {
 
 .note-container,
 .user-container {
-    border-radius: 5px;
+    border-collapse: collapse;
     border: 1px solid black;
     padding: 1em;
     margin: 1em;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
 }
 
 .note-title,
 .note-content,
 .user-name,
 .user-email,
-.user-age {
-    margin: 0.5em;
-    align-self: center;
-}
-
+.user-age,
 .note-id,
-.user-id {
+.user-id,
+.col-name {
     margin: 0.5em;
+    padding: 0.5em;
+    border: 1px solid black;
 }

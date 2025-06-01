@@ -37,6 +37,34 @@ const deleteAllUsersForm = <HTMLFormElement>(
 );
 
 function createNotes(notesArray: []) {
+    const table = document.createElement("table");
+    table.classList.add("note-container");
+    notesArea.append(table);
+    const caption = document.createElement("caption");
+    caption.textContent = "Notes data";
+    caption.classList.add("caption");
+    table.append(caption);
+    const thead = document.createElement("thead");
+    table.append(thead);
+    const headRow = document.createElement("tr");
+    thead.append(headRow);
+    const idHead = document.createElement("th");
+    idHead.textContent = "Id";
+    idHead.classList.add("col-name");
+    idHead.scope = "col";
+    headRow.append(idHead);
+    const titleHead = document.createElement("th");
+    titleHead.textContent = "Title";
+    titleHead.classList.add("col-name");
+    titleHead.scope = "col";
+    headRow.append(titleHead);
+    const contentHead = document.createElement("th");
+    contentHead.textContent = "Content";
+    contentHead.classList.add("col-name");
+    contentHead.scope = "col";
+    headRow.append(contentHead);
+    const tbody = document.createElement("tbody");
+    table.append(tbody);
     notesArray.forEach((note: unknown) => {
         if (
             note &&
@@ -48,26 +76,58 @@ function createNotes(notesArray: []) {
             "content" in note &&
             typeof note.content === "string"
         ) {
-            const container = document.createElement("div");
-            container.classList.add("note-container");
-            notesArea.append(container);
-            const noteId = document.createElement("p");
+            const newRow = document.createElement("tr");
+            tbody.append(newRow);
+            const noteId = document.createElement("td");
             noteId.classList.add("note-id");
-            noteId.textContent = `Id: ${note.id.toString(10)}`;
-            container.append(noteId);
-            const title = document.createElement("p");
+            noteId.textContent = note.id.toString(10);
+            newRow.append(noteId);
+            const title = document.createElement("td");
             title.classList.add("note-title");
-            title.textContent = `Title: ${note.title}`;
-            container.append(title);
-            const content = document.createElement("p");
+            title.textContent = note.title;
+            newRow.append(title);
+            const content = document.createElement("td");
             content.classList.add("note-content");
-            content.textContent = `Content: ${note.content}`;
-            container.append(content);
+            content.textContent = note.content;
+            newRow.append(content);
         }
     });
 }
 
 function createUsers(usersArray: []) {
+    const table = document.createElement("table");
+    table.classList.add("user-container");
+    usersArea.append(table);
+    const caption = document.createElement("caption");
+    caption.textContent = "User data";
+    caption.classList.add("caption");
+    table.append(caption);
+    const thead = document.createElement("thead");
+    table.append(thead);
+    const headRow = document.createElement("tr");
+    thead.append(headRow);
+    const idHead = document.createElement("th");
+    idHead.textContent = "Id";
+    idHead.classList.add("col-name");
+    idHead.scope = "col";
+    headRow.append(idHead);
+    const nameHead = document.createElement("th");
+    nameHead.textContent = "Name";
+    nameHead.classList.add("col-name");
+    nameHead.scope = "col";
+    headRow.append(nameHead);
+    const emailHead = document.createElement("th");
+    emailHead.textContent = "Email";
+    emailHead.classList.add("col-name");
+    emailHead.scope = "col";
+    headRow.append(emailHead);
+    const ageHead = document.createElement("th");
+    ageHead.textContent = "Age";
+    ageHead.classList.add("col-name");
+    ageHead.scope = "col";
+    headRow.append(ageHead);
+    const tbody = document.createElement("tbody");
+    table.append(tbody);
     usersArray.forEach((user: unknown) => {
         if (
             user &&
@@ -81,25 +141,24 @@ function createUsers(usersArray: []) {
             "age" in user &&
             typeof user.age === "number"
         ) {
-            const container = document.createElement("div");
-            container.classList.add("user-container");
-            usersArea.append(container);
-            const userId = document.createElement("p");
+            const newRow = document.createElement("tr");
+            tbody.append(newRow);
+            const userId = document.createElement("td");
             userId.classList.add("user-id");
-            userId.textContent = `Id: ${user.id.toString(10)}`;
-            container.append(userId);
-            const name = document.createElement("p");
+            userId.textContent = user.id.toString(10);
+            newRow.append(userId);
+            const name = document.createElement("td");
             name.classList.add("user-name");
-            name.textContent = `Name: ${user.name}`;
-            container.append(name);
-            const email = document.createElement("p");
+            name.textContent = user.name;
+            newRow.append(name);
+            const email = document.createElement("td");
             email.classList.add("user-email");
-            email.textContent = `Email: ${user.email}`;
-            container.append(email);
-            const age = document.createElement("p");
+            email.textContent = user.email;
+            newRow.append(email);
+            const age = document.createElement("td");
             age.classList.add("user-age");
-            age.textContent = `Age: ${user.age}`;
-            container.append(age);
+            age.textContent = user.age.toString(10);
+            newRow.append(age);
         }
     });
 }
