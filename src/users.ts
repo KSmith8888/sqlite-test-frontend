@@ -1,0 +1,340 @@
+const usersArea = <HTMLElement>document.getElementById("users-area");
+const getUsersForm = <HTMLFormElement>document.getElementById("get-users-form");
+const userByIdForm = <HTMLFormElement>(
+    document.getElementById("user-by-id-form")
+);
+const createUserForm = <HTMLFormElement>(
+    document.getElementById("create-user-form")
+);
+const loginForm = <HTMLFormElement>document.getElementById("login-form");
+const updateEmailForm = <HTMLFormElement>(
+    document.getElementById("update-email-form")
+);
+const deleteUserForm = <HTMLFormElement>(
+    document.getElementById("delete-user-form")
+);
+const deleteAllUsersForm = <HTMLFormElement>(
+    document.getElementById("delete-all-users-form")
+);
+const messageText = <HTMLParagraphElement>(
+    document.getElementById("message-text")
+);
+const loggedInText = <HTMLParagraphElement>(
+    document.getElementById("logged-in-text")
+);
+/*
+const logOutButton = <HTMLButtonElement>(
+    document.getElementById("log-out-button")
+);
+*/
+
+function createUsers(usersArray: []) {
+    const table = document.createElement("table");
+    table.classList.add("user-container");
+    usersArea.append(table);
+    const caption = document.createElement("caption");
+    caption.textContent = "User data";
+    caption.classList.add("caption");
+    table.append(caption);
+    const thead = document.createElement("thead");
+    table.append(thead);
+    const headRow = document.createElement("tr");
+    thead.append(headRow);
+    const idHead = document.createElement("th");
+    idHead.textContent = "Id";
+    idHead.classList.add("col-name");
+    idHead.scope = "col";
+    headRow.append(idHead);
+    const nameHead = document.createElement("th");
+    nameHead.textContent = "Name";
+    nameHead.classList.add("col-name");
+    nameHead.scope = "col";
+    headRow.append(nameHead);
+    const emailHead = document.createElement("th");
+    emailHead.textContent = "Email";
+    emailHead.classList.add("col-name");
+    emailHead.scope = "col";
+    headRow.append(emailHead);
+    const ageHead = document.createElement("th");
+    ageHead.textContent = "Age";
+    ageHead.classList.add("col-name");
+    ageHead.scope = "col";
+    headRow.append(ageHead);
+    const tbody = document.createElement("tbody");
+    table.append(tbody);
+    usersArray.forEach((user: unknown) => {
+        if (
+            user &&
+            typeof user === "object" &&
+            "id" in user &&
+            typeof user.id === "number" &&
+            "name" in user &&
+            typeof user.name === "string" &&
+            "email" in user &&
+            typeof user.email === "string" &&
+            "age" in user &&
+            typeof user.age === "number"
+        ) {
+            const newRow = document.createElement("tr");
+            tbody.append(newRow);
+            const userId = document.createElement("td");
+            userId.classList.add("user-id");
+            userId.textContent = user.id.toString(10);
+            newRow.append(userId);
+            const name = document.createElement("td");
+            name.classList.add("user-name");
+            name.textContent = user.name;
+            newRow.append(name);
+            const email = document.createElement("td");
+            email.classList.add("user-email");
+            email.textContent = user.email;
+            newRow.append(email);
+            const age = document.createElement("td");
+            age.classList.add("user-age");
+            age.textContent = user.age.toString(10);
+            newRow.append(age);
+        }
+    });
+}
+
+getUsersForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+        const response = await fetch("http://127.0.0.1:3000/api/v1/users");
+        const data = await response.json();
+        if (!data) throw new Error("No data received");
+        if (data.message && typeof data.message === "string") {
+            messageText.textContent = data.message;
+        }
+        usersArea.replaceChildren();
+        if (data.users && Array.isArray(data.users)) {
+            if (data.users.length > 0) createUsers(data.users);
+            else messageText.textContent = "Message: No users were returned";
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            messageText.textContent = error.message;
+        }
+    }
+});
+
+userByIdForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+        const formInfo = new FormData(userByIdForm);
+        const userId = formInfo.get("userId");
+        if (
+            !userId ||
+            typeof userId !== "string" ||
+            typeof parseInt(userId) !== "number"
+        ) {
+            throw new Error("No valid note id provided");
+        }
+        const response = await fetch(
+            `http://127.0.0.1:3000/api/v1/users/${userId}`
+        );
+        const data = await response.json();
+        if (!data) throw new Error("No data received");
+        if (data.message && typeof data.message === "string") {
+            messageText.textContent = data.message;
+        }
+        usersArea.replaceChildren();
+        if (data.users && Array.isArray(data.users)) {
+            if (data.users.length > 0) createUsers(data.users);
+            else messageText.textContent = "Message: No users were returned";
+        }
+        userByIdForm.reset();
+    } catch (error) {
+        if (error instanceof Error) {
+            messageText.textContent = error.message;
+        }
+    }
+});
+
+createUserForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+        const formData = new FormData(createUserForm);
+        const name = formData.get("name");
+        const username = formData.get("username");
+        const password = formData.get("password");
+        const email = formData.get("email");
+        const age = formData.get("age");
+        const response = await fetch(
+            "http://127.0.0.1:3000/api/v1/users/create",
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    name,
+                    username,
+                    password,
+                    email,
+                    age,
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        const data = await response.json();
+        if (!data) throw new Error("No data received");
+        if (data.message && typeof data.message === "string") {
+            messageText.textContent = data.message;
+        }
+        usersArea.replaceChildren();
+        if (data.users && Array.isArray(data.users)) {
+            if (data.users.length > 0) createUsers(data.users);
+            else messageText.textContent = "Message: No users were returned";
+        }
+        createUserForm.reset();
+    } catch (error) {
+        if (error instanceof Error) {
+            messageText.textContent = error.message;
+        }
+    }
+});
+
+loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+        const formInfo = new FormData(loginForm);
+        const username = formInfo.get("username");
+        const password = formInfo.get("password");
+        const response = await fetch(
+            "http://127.0.0.1:3000/api/v1/users/login",
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    username,
+                    password,
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        const data = await response.json();
+        if (!data) throw new Error("No data received");
+        if (data.message && typeof data.message === "string") {
+            messageText.textContent = data.message;
+        }
+        if (
+            data.users &&
+            typeof data.users === "object" &&
+            data.users.length === 1
+        ) {
+            const user = data.users[0];
+            loggedInText.textContent = `Name: ${user.username} Status: Logged in`;
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            messageText.textContent = error.message;
+        }
+    }
+});
+/*
+logOutButton.addEventListener("click", () => {
+    loggedInText.textContent = "Name: GUEST Status: Not logged in";
+});
+*/
+updateEmailForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+        const formInfo = new FormData(updateEmailForm);
+        const newEmail = formInfo.get("email");
+        const userId = formInfo.get("userId");
+        if (
+            !userId ||
+            typeof userId !== "string" ||
+            typeof parseInt(userId) !== "number"
+        ) {
+            throw new Error("No valid note id provided");
+        }
+        const response = await fetch(
+            `http://127.0.0.1:3000/api/v1/users/${userId}`,
+            {
+                method: "PATCH",
+                body: JSON.stringify({
+                    email: newEmail,
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        const data = await response.json();
+        if (!data) throw new Error("No data received");
+        if (data.message && typeof data.message === "string") {
+            messageText.textContent = data.message;
+        }
+        usersArea.replaceChildren();
+        if (data.users && Array.isArray(data.users)) {
+            if (data.users.length > 0) createUsers(data.users);
+            else messageText.textContent = "Message: No users were returned";
+        }
+        updateEmailForm.reset();
+    } catch (error) {
+        if (error instanceof Error) {
+            messageText.textContent = error.message;
+        }
+    }
+});
+
+deleteUserForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+        const formInfo = new FormData(deleteUserForm);
+        const deleteId = formInfo.get("deleteId");
+        if (
+            !deleteId ||
+            typeof deleteId !== "string" ||
+            typeof parseInt(deleteId, 10) !== "number"
+        ) {
+            throw new Error("Valid user id not provided");
+        }
+        const response = await fetch(
+            `http://127.0.0.1:3000/api/v1/users/${deleteId}`,
+            {
+                method: "DELETE",
+            }
+        );
+        const data = await response.json();
+        if (!data) throw new Error("No data received");
+        if (data.message && typeof data.message === "string") {
+            messageText.textContent = data.message;
+        }
+        usersArea.replaceChildren();
+        if (data.users && Array.isArray(data.users)) {
+            if (data.users.length > 0) createUsers(data.users);
+            else messageText.textContent = "Message: No users were returned";
+        }
+        deleteUserForm.reset();
+    } catch (error) {
+        if (error instanceof Error) {
+            messageText.textContent = error.message;
+        }
+    }
+});
+
+deleteAllUsersForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+        const response = await fetch("http://127.0.0.1:3000/api/v1/users/", {
+            method: "DELETE",
+        });
+        const data = await response.json();
+        if (!data) throw new Error("No data received");
+        if (data.message && typeof data.message === "string") {
+            messageText.textContent = data.message;
+        }
+        usersArea.replaceChildren();
+        if (data.users && Array.isArray(data.users)) {
+            if (data.users.length > 0) createUsers(data.users);
+            else messageText.textContent = "Message: No users were returned";
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            messageText.textContent = error.message;
+        }
+    }
+});

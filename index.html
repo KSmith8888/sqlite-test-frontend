@@ -9,9 +9,29 @@
         <h1 id="main-heading">
             An app to test the new sqlite module in NodeJS
         </h1>
+        <p id="logged-in-text">Name: GUEST Status: Not logged in</p>
+        <button id="log-out-buttom" type="button">Log Out</button>
         <div id="main-container">
             <section id="forms-section">
                 <h2 id="forms-section-heading">Forms</h2>
+                <form id="login-form">
+                    <h3 class="form-heading">Login</h3>
+                    <label for="username-input">Username:</label>
+                    <input
+                        id="username-input"
+                        name="username"
+                        type="text"
+                        required
+                    />
+                    <label for="password-input">Password:</label>
+                    <input
+                        id="password-input"
+                        name="password"
+                        type="password"
+                        required
+                    />
+                    <button type="submit">Submit</button>
+                </form>
                 <form id="get-notes-form" class="note-form">
                     <h3 class="form-heading">Get all notes</h3>
                     <button type="submit">Submit</button>
@@ -88,6 +108,10 @@
                     <h3 class="form-heading">Create new user</h3>
                     <label for="new-user-name">Name:</label>
                     <input id="new-user-name" name="name" type="text" />
+                    <label for="new-username">Username:</label>
+                    <input id="new-username" name="username" type="text" />
+                    <label for="new-password">Password:</label>
+                    <input id="new-password" name="password" type="password" />
                     <label for="new-user-email">Email:</label>
                     <input id="new-user-email" name="email" type="email" />
                     <label for="new-user-age">Age:</label>
@@ -133,5 +157,6 @@
             </section>
         </div>
         <script type="module" src="/src/notes.ts"></script>
+        <script type="module" src="/src/users.ts"></script>
     </body>
 </html>
