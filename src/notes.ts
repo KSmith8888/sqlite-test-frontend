@@ -133,6 +133,8 @@ noteByIdForm.addEventListener("submit", async (e) => {
 createNoteForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     try {
+        const userId = sessionStorage.getItem("user_id");
+        if (!userId) throw new Error("Please log in");
         const formData = new FormData(createNoteForm);
         const title = formData.get("title");
         const content = formData.get("content");
@@ -143,6 +145,7 @@ createNoteForm.addEventListener("submit", async (e) => {
                 body: JSON.stringify({
                     title: title,
                     content: content,
+                    userId,
                 }),
                 headers: {
                     "Content-Type": "application/json",

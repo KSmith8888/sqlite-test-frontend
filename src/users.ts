@@ -22,11 +22,9 @@ const messageText = <HTMLParagraphElement>(
 const loggedInText = <HTMLParagraphElement>(
     document.getElementById("logged-in-text")
 );
-/*
 const logOutButton = <HTMLButtonElement>(
     document.getElementById("log-out-button")
 );
-*/
 
 function createUsers(usersArray: []) {
     const table = document.createElement("table");
@@ -50,6 +48,11 @@ function createUsers(usersArray: []) {
     nameHead.classList.add("col-name");
     nameHead.scope = "col";
     headRow.append(nameHead);
+    const usernameHead = document.createElement("th");
+    usernameHead.textContent = "Username";
+    usernameHead.classList.add("col-name");
+    usernameHead.scope = "col";
+    headRow.append(usernameHead);
     const emailHead = document.createElement("th");
     emailHead.textContent = "Email";
     emailHead.classList.add("col-name");
@@ -70,6 +73,8 @@ function createUsers(usersArray: []) {
             typeof user.id === "number" &&
             "name" in user &&
             typeof user.name === "string" &&
+            "username" in user &&
+            typeof user.username === "string" &&
             "email" in user &&
             typeof user.email === "string" &&
             "age" in user &&
@@ -85,6 +90,10 @@ function createUsers(usersArray: []) {
             name.classList.add("user-name");
             name.textContent = user.name;
             newRow.append(name);
+            const username = document.createElement("td");
+            username.classList.add("user-name");
+            username.textContent = user.username;
+            newRow.append(username);
             const email = document.createElement("td");
             email.classList.add("user-email");
             email.textContent = user.email;
@@ -225,18 +234,21 @@ loginForm.addEventListener("submit", async (e) => {
         ) {
             const user = data.users[0];
             loggedInText.textContent = `Name: ${user.username} Status: Logged in`;
+            sessionStorage.setItem("user_id", data.users[0].id);
         }
+        loginForm.reset();
     } catch (error) {
         if (error instanceof Error) {
             messageText.textContent = error.message;
         }
     }
 });
-/*
+
 logOutButton.addEventListener("click", () => {
     loggedInText.textContent = "Name: GUEST Status: Not logged in";
+    sessionStorage.clear();
 });
-*/
+
 updateEmailForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     try {
