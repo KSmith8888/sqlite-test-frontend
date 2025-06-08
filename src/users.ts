@@ -43,11 +43,6 @@ function createUsers(usersArray: []) {
     idHead.classList.add("col-name");
     idHead.scope = "col";
     headRow.append(idHead);
-    const nameHead = document.createElement("th");
-    nameHead.textContent = "Name";
-    nameHead.classList.add("col-name");
-    nameHead.scope = "col";
-    headRow.append(nameHead);
     const usernameHead = document.createElement("th");
     usernameHead.textContent = "Username";
     usernameHead.classList.add("col-name");
@@ -63,6 +58,11 @@ function createUsers(usersArray: []) {
     ageHead.classList.add("col-name");
     ageHead.scope = "col";
     headRow.append(ageHead);
+    const adminHead = document.createElement("th");
+    adminHead.textContent = "Admin";
+    adminHead.classList.add("col-name");
+    adminHead.scope = "col";
+    headRow.append(adminHead);
     const tbody = document.createElement("tbody");
     table.append(tbody);
     usersArray.forEach((user: unknown) => {
@@ -71,14 +71,14 @@ function createUsers(usersArray: []) {
             typeof user === "object" &&
             "id" in user &&
             typeof user.id === "number" &&
-            "name" in user &&
-            typeof user.name === "string" &&
             "username" in user &&
             typeof user.username === "string" &&
             "email" in user &&
             typeof user.email === "string" &&
             "age" in user &&
-            typeof user.age === "number"
+            typeof user.age === "number" &&
+            "is_admin" in user &&
+            typeof user.is_admin === "number"
         ) {
             const newRow = document.createElement("tr");
             tbody.append(newRow);
@@ -86,10 +86,6 @@ function createUsers(usersArray: []) {
             userId.classList.add("user-id");
             userId.textContent = user.id.toString(10);
             newRow.append(userId);
-            const name = document.createElement("td");
-            name.classList.add("user-name");
-            name.textContent = user.name;
-            newRow.append(name);
             const username = document.createElement("td");
             username.classList.add("user-name");
             username.textContent = user.username;
@@ -102,6 +98,10 @@ function createUsers(usersArray: []) {
             age.classList.add("user-age");
             age.textContent = user.age.toString(10);
             newRow.append(age);
+            const admin = document.createElement("td");
+            admin.classList.add("user-admin");
+            admin.textContent = user.is_admin === 1 ? "True" : "False";
+            newRow.append(admin);
         }
     });
 }
@@ -331,8 +331,14 @@ deleteUserForm.addEventListener("submit", async (e) => {
 deleteAllUsersForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     try {
+        const userId = sessionStorage.getItem("user_id");
+        if (!userId)
+            throw new Error("You must log in before performing this action");
         const response = await fetch("http://127.0.0.1:3000/api/v1/users/", {
             method: "DELETE",
+            headers: {
+                "user_id": userId,
+            },
         });
         const data = await response.json();
         if (!data) throw new Error("No data received");

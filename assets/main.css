@@ -63,7 +63,8 @@ body {
 .user-age,
 .note-id,
 .user-id,
-.col-name {
+.col-name,
+.user-admin {
     margin: 0.5em;
     padding: 0.5em;
     border: 1px solid black;
