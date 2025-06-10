@@ -33,19 +33,24 @@ function createNotes(notesArray: []) {
     thead.append(headRow);
     const idHead = document.createElement("th");
     idHead.textContent = "Id";
-    idHead.classList.add("col-name");
+    idHead.classList.add("table-data");
     idHead.scope = "col";
     headRow.append(idHead);
     const titleHead = document.createElement("th");
     titleHead.textContent = "Title";
-    titleHead.classList.add("col-name");
+    titleHead.classList.add("table-data");
     titleHead.scope = "col";
     headRow.append(titleHead);
     const contentHead = document.createElement("th");
     contentHead.textContent = "Content";
-    contentHead.classList.add("col-name");
+    contentHead.classList.add("table-data");
     contentHead.scope = "col";
     headRow.append(contentHead);
+    const userIdHead = document.createElement("th");
+    userIdHead.textContent = "User Id";
+    userIdHead.classList.add("table-data");
+    userIdHead.scope = "col";
+    headRow.append(userIdHead);
     const tbody = document.createElement("tbody");
     table.append(tbody);
     notesArray.forEach((note: unknown) => {
@@ -57,22 +62,28 @@ function createNotes(notesArray: []) {
             "title" in note &&
             typeof note.title === "string" &&
             "content" in note &&
-            typeof note.content === "string"
+            typeof note.content === "string" &&
+            "user_id" in note &&
+            typeof note.user_id === "number"
         ) {
             const newRow = document.createElement("tr");
             tbody.append(newRow);
             const noteId = document.createElement("td");
-            noteId.classList.add("note-id");
+            noteId.classList.add("table-data");
             noteId.textContent = note.id.toString(10);
             newRow.append(noteId);
             const title = document.createElement("td");
-            title.classList.add("note-title");
+            title.classList.add("table-data");
             title.textContent = note.title;
             newRow.append(title);
             const content = document.createElement("td");
-            content.classList.add("note-content");
+            content.classList.add("table-data");
             content.textContent = note.content;
             newRow.append(content);
+            const userId = document.createElement("td");
+            userId.classList.add("table-data");
+            userId.textContent = note.user_id.toString(10);
+            newRow.append(userId);
         }
     });
 }

@@ -32,7 +32,8 @@ body {
     flex-direction: column;
 }
 
-.note-form {
+.note-form,
+#status-section {
     max-width: 20em;
     border-radius: 5px;
     border: 1px solid black;
@@ -56,16 +57,9 @@ body {
     margin: 1em;
 }
 
-.note-title,
-.note-content,
-.user-name,
-.user-email,
-.user-age,
-.note-id,
-.user-id,
-.col-name,
-.user-admin {
+.table-data {
     margin: 0.5em;
     padding: 0.5em;
     border: 1px solid black;
+    text-align: center;
 }
