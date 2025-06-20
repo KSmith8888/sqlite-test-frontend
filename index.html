@@ -58,6 +58,18 @@
                     <input id="new-note-content" name="content" type="text" />
                     <button type="submit">Submit</button>
                 </form>
+                <form id="complete-note-form" class="note-form">
+                    <h3 class="form-heading">Mark note as completed</h3>
+                    <label for="complete-note-id">Note Id:</label>
+                    <input
+                        name="noteId"
+                        id="complete-note-id"
+                        type="number"
+                        min="1"
+                        max="99"
+                    />
+                    <button type="submit">Submit</button>
+                </form>
                 <form id="edit-note-form" class="note-form">
                     <h3 class="form-heading">Edit a note</h3>
                     <label for="edit-note-id">Note Id:</label>

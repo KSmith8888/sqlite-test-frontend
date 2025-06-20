@@ -7,6 +7,9 @@ const noteByIdForm = <HTMLFormElement>(
 const createNoteForm = <HTMLFormElement>(
     document.getElementById("create-note-form")
 );
+const completeNoteForm = <HTMLFormElement>(
+    document.getElementById("complete-note-form")
+);
 const editNoteForm = <HTMLFormElement>document.getElementById("edit-note-form");
 const deleteByIdForm = <HTMLFormElement>(
     document.getElementById("delete-by-id-form")
@@ -51,6 +54,11 @@ function createNotes(notesArray: []) {
     userIdHead.classList.add("table-data");
     userIdHead.scope = "col";
     headRow.append(userIdHead);
+    const completedHead = document.createElement("th");
+    completedHead.textContent = "Completed";
+    completedHead.classList.add("table-data");
+    completedHead.scope = "col";
+    headRow.append(completedHead);
     const tbody = document.createElement("tbody");
     table.append(tbody);
     notesArray.forEach((note: unknown) => {
@@ -64,7 +72,9 @@ function createNotes(notesArray: []) {
             "content" in note &&
             typeof note.content === "string" &&
             "user_id" in note &&
-            typeof note.user_id === "number"
+            typeof note.user_id === "number" &&
+            "is_completed" in note &&
+            typeof note.is_completed === "number"
         ) {
             const newRow = document.createElement("tr");
             tbody.append(newRow);
@@ -84,6 +94,11 @@ function createNotes(notesArray: []) {
             userId.classList.add("table-data");
             userId.textContent = note.user_id.toString(10);
             newRow.append(userId);
+            const isCompleted = document.createElement("td");
+            isCompleted.classList.add("table-data");
+            isCompleted.textContent =
+                note.is_completed === 1 ? "True" : "False";
+            newRow.append(isCompleted);
         }
     });
 }
@@ -173,6 +188,34 @@ createNoteForm.addEventListener("submit", async (e) => {
             createNotes(data.notes);
         }
         createNoteForm.reset();
+    } catch (error) {
+        if (error instanceof Error) {
+            messageText.textContent = error.message;
+        }
+    }
+});
+
+completeNoteForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+        const formData = new FormData(completeNoteForm);
+        const noteId = formData.get("noteId");
+        const response = await fetch(
+            `http://127.0.0.1:3000/api/v1/notes/complete/${noteId}`,
+            {
+                method: "PATCH",
+            }
+        );
+        const data = await response.json();
+        if (!data) throw new Error("No data received");
+        if (data.message && typeof data.message === "string") {
+            messageText.textContent = data.message;
+        }
+        notesArea.replaceChildren();
+        if (data.notes && Array.isArray(data.notes) && data.notes.length > 0) {
+            createNotes(data.notes);
+        }
+        completeNoteForm.reset();
     } catch (error) {
         if (error instanceof Error) {
             messageText.textContent = error.message;
