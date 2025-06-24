@@ -22,6 +22,21 @@ const messageText = <HTMLParagraphElement>(
 );
 const notesArea = <HTMLElement>document.getElementById("notes-area");
 
+function createDateString(timestamp: number) {
+    const date = new Date(timestamp);
+    const initialHours = date.getHours();
+    const hoursAmPm = initialHours >= 12 ? "PM" : "AM";
+    const hours = initialHours > 12 ? initialHours - 12 : initialHours;
+    const initialMinutes = date.getMinutes();
+    const minutes =
+        initialMinutes > 9
+            ? `${initialMinutes} ${hoursAmPm}`
+            : `0${initialMinutes} ${hoursAmPm}`;
+    const dateString = date.toDateString();
+    const completeDatString = `${hours}:${minutes} ${dateString}`;
+    return completeDatString;
+}
+
 function createNotes(notesArray: []) {
     const table = document.createElement("table");
     table.classList.add("note-container");
@@ -59,6 +74,11 @@ function createNotes(notesArray: []) {
     completedHead.classList.add("table-data");
     completedHead.scope = "col";
     headRow.append(completedHead);
+    const createdHead = document.createElement("th");
+    createdHead.textContent = "Created At";
+    createdHead.classList.add("table-data");
+    createdHead.scope = "col";
+    headRow.append(createdHead);
     const tbody = document.createElement("tbody");
     table.append(tbody);
     notesArray.forEach((note: unknown) => {
@@ -74,7 +94,9 @@ function createNotes(notesArray: []) {
             "user_id" in note &&
             typeof note.user_id === "number" &&
             "is_completed" in note &&
-            typeof note.is_completed === "number"
+            typeof note.is_completed === "number" &&
+            "created_at" in note &&
+            typeof note.created_at === "number"
         ) {
             const newRow = document.createElement("tr");
             tbody.append(newRow);
@@ -99,6 +121,10 @@ function createNotes(notesArray: []) {
             isCompleted.textContent =
                 note.is_completed === 1 ? "True" : "False";
             newRow.append(isCompleted);
+            const createdAt = document.createElement("td");
+            createdAt.classList.add("table-data");
+            createdAt.textContent = `${createDateString(note.created_at)}`;
+            newRow.append(createdAt);
         }
     });
 }
